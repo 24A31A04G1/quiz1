@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +24,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 .score{font-weight:900;color:white}.time{font-variant-numeric:tabular-nums;color:#bfb4ff;font-weight:800}
 .select-box{width:17px;height:17px;accent-color:var(--primary);cursor:pointer}
 .bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:18px 22px}.actions{flex:1}.selected-count{color:var(--muted);font-size:11px}
-.primary{height:44px;padding:0 18px;border:0;border-radius:11px;color:white;background:linear-gradient(135deg,#7c5cff,#6746e8);font-size:11px;font-weight:900;cursor:pointer}.primary:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}.actions form{display:inline-flex}.secondary-action{background:linear-gradient(135deg,#2563eb,#3b82f6)}.results-action{background:linear-gradient(135deg,#059669,#10b981)}.undeclare-action{background:linear-gradient(135deg,#b4233c,#e0475d)}
+.primary{height:44px;padding:0 18px;border:0;border-radius:11px;color:white;background:linear-gradient(135deg,#7c5cff,#6746e8);font-size:11px;font-weight:900;cursor:pointer}.primary:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}.actions form{display:inline-flex}.undeclare-action{background:linear-gradient(135deg,#b4233c,#e0475d)}
 .danger{height:42px;padding:0 15px;border:1px solid rgba(255,96,119,.2);border-radius:10px;color:#ff91a2;background:rgba(255,96,119,.06);font-size:10px;font-weight:800;cursor:pointer}
 .winners{margin-top:24px}.winner-card{padding:18px 20px;border:1px solid rgba(255,200,87,.12);border-radius:16px;background:rgba(255,200,87,.04);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:15px}.winner-rank{color:#ffd66f;font-weight:900}.winner-name{font-weight:800}.winner-meta{color:var(--muted);font-size:10px;margin-top:4px}.winner-score{font-weight:900}.empty{padding:50px;text-align:center;color:var(--muted);font-size:12px}
 .view-btn{display:inline-flex;align-items:center;justify-content:center;min-width:92px;height:34px;padding:0 11px;border:1px solid rgba(124,92,255,.25);border-radius:9px;color:#c5baff;background:rgba(124,92,255,.08);font-size:9px;font-weight:900;transition:.2s}.view-btn:hover{color:#fff;background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.5)}@media(max-width:800px){.main{padding:22px 15px 50px}.summary{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr}.top{flex-direction:column}.back{width:100%;justify-content:center}.bottom{flex-direction:column;align-items:stretch}.actions{flex-direction:column;align-items:stretch}.primary{width:100%}}
@@ -36,7 +37,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
         <div>
             <div class="eyebrow">ADMIN / RESULTS</div>
             <h1>{{ quiz.title }}</h1>
-            <p>Review submissions, inspect every answer, rank students by marks and time, and declare official results.</p>
+            <p>Review submissions, inspect answers, rank students by marks and time, and declare winners.</p>
         </div>
         <a href="{{ url_for('admin_dashboard') }}" class="back">← Back to Dashboard</a>
     </header>
@@ -50,8 +51,6 @@ a{text-decoration:none;color:inherit}button{font:inherit}
     <section class="summary">
         <div class="stat"><span>SUBMISSIONS</span><strong>{{ leaderboard|length }}</strong></div>
         <div class="stat"><span>WINNERS</span><strong style="font-size:18px">{{ 'VISIBLE' if quiz.winners_revealed else 'HIDDEN' }}</strong></div>
-        <div class="stat"><span>LEADERBOARD</span><strong style="font-size:18px">{{ 'VISIBLE' if quiz.leaderboard_revealed else 'HIDDEN' }}</strong></div>
-        <div class="stat"><span>RESULTS / SCRIPTS</span><strong style="font-size:18px">{{ 'VISIBLE' if quiz.results_revealed else 'HIDDEN' }}</strong></div>
     </section>
 
     <section class="panel">
@@ -151,50 +150,6 @@ a{text-decoration:none;color:inherit}button{font:inherit}
                 </button>
                 {% endif %}
 
-                {% if quiz.leaderboard_revealed %}
-                <form
-                    method="POST"
-                    action="{{ url_for('undeclare_quiz_leaderboard', quiz_id=quiz.id) }}"
-                    onsubmit="return confirm('Undeclare the leaderboard? It will be hidden from all students.');"
-                >
-                    <button class="primary undeclare-action" type="submit">
-                        UNDECLARE LEADERBOARD
-                    </button>
-                </form>
-                {% else %}
-                <form
-                    method="POST"
-                    action="{{ url_for('declare_quiz_leaderboard', quiz_id=quiz.id) }}"
-                    onsubmit="return confirm('Declare the leaderboard for ALL students?');"
-                >
-                    <button class="primary secondary-action" type="submit">
-                        DECLARE LEADERBOARD
-                    </button>
-                </form>
-                {% endif %}
-
-                {% if quiz.results_revealed %}
-                <form
-                    method="POST"
-                    action="{{ url_for('undeclare_quiz_results', quiz_id=quiz.id) }}"
-                    onsubmit="return confirm('Undeclare individual results/scripts? Students will no longer see their results.');"
-                >
-                    <button class="primary undeclare-action" type="submit">
-                        UNDECLARE RESULTS
-                    </button>
-                </form>
-                {% else %}
-                <form
-                    method="POST"
-                    action="{{ url_for('declare_quiz_results', quiz_id=quiz.id) }}"
-                    onsubmit="return confirm('Declare individual results/scripts for ALL students?');"
-                >
-                    <button class="primary results-action" type="submit">
-                        DECLARE RESULTS
-                    </button>
-                </form>
-                {% endif %}
-
             </div>
         </div>
         {% else %}
@@ -206,7 +161,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
     <section class="winners">
         <div class="panel">
             <div class="panel-head">
-                <div><h2>Declared Winners</h2><p>Students currently stored in the winners table. Winners and leaderboard are public only after their declaration.</p></div>
+                <div><h2>Declared Winners</h2><p>Students currently stored in the winners table.</p></div>
                 {% if quiz.winners_revealed %}
                 <form method="POST" action="{{ url_for('undeclare_quiz_winners', quiz_id=quiz.id) }}" onsubmit="return confirm('Undeclare the winners and remove the current winners list?');">
                     <button class="danger" type="submit">UNDECLARE WINNERS</button>
