@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuizCore | Admin Dashboard</title>
+<title>Logic Hunt | Admin Dashboard</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -33,26 +33,22 @@ border-right:1px solid var(--border);backdrop-filter:blur(25px);z-index:20}
 .eyebrow{color:var(--primary2);font-size:10px;font-weight:900;letter-spacing:1.7px}.heading h1{margin-top:8px;font-size:clamp(28px,3vw,38px);font-weight:850;letter-spacing:-1.5px}.heading p{margin-top:8px;color:var(--muted);font-size:13px}
 .create-button,.primary-btn{height:46px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 18px;border:0;border-radius:12px;color:white;background:linear-gradient(135deg,#7c5cff,#6746e8);font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 30px rgba(124,92,255,.2)}
 .flash{padding:12px 15px;margin-bottom:18px;border-radius:10px;font-size:12px;font-weight:700}.flash.success{color:#78e8c4;background:rgba(49,217,163,.08);border:1px solid rgba(49,217,163,.12)}.flash.error{color:#ff91a2;background:rgba(255,96,119,.08);border:1px solid rgba(255,96,119,.12)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:30px}.stat-card{min-height:125px;padding:21px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(145deg,rgba(17,24,45,.9),rgba(12,17,33,.82))}
-.stat-label{color:var(--muted);font-size:11px;font-weight:700}.stat-number{margin-top:16px;font-size:29px;font-weight:850}.stat-meta{margin-top:5px;color:#5f6a80;font-size:10px}
 .section{margin-top:28px}.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.section-title h2{margin-top:5px;font-size:20px;font-weight:800}
 .quiz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.quiz-card{padding:21px;border:1px solid var(--border);border-radius:18px;background:rgba(14,20,37,.82);transition:.2s}.quiz-card:hover{transform:translateY(-3px);border-color:rgba(124,92,255,.2)}
-.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.status{padding:5px 9px;border-radius:100px;font-size:9px;font-weight:900;letter-spacing:.5px}.status.draft{color:#9ba4b8;background:rgba(255,255,255,.06)}.status.running{color:var(--green);background:rgba(49,217,163,.09)}
-.quiz-card h3{font-size:17px;font-weight:800;line-height:1.35}.quiz-description{min-height:38px;margin-top:7px;color:var(--muted);font-size:11px;line-height:1.55}
-.quiz-details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:19px;padding-top:16px;border-top:1px solid var(--border)}.detail span{display:block;color:#5e687e;font-size:9px}.detail strong{display:block;margin-top:4px;font-size:12px}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.quiz-card h3{font-size:17px;font-weight:800;line-height:1.35}.quiz-description{min-height:38px;margin-top:9px;color:var(--muted);font-size:11px;line-height:1.55}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}.action{height:38px;border:1px solid var(--border);border-radius:10px;color:#cdd3df;background:rgba(255,255,255,.025);font-size:10px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.action:hover{color:white;background:rgba(124,92,255,.1)}.action.active{color:#07130f;background:var(--green);border-color:transparent}.action.draft{color:#ffe8a8;background:rgba(255,200,87,.08)}
+.action:hover{color:white;background:rgba(124,92,255,.1)}
 .full{grid-column:1/-1}.empty{padding:55px 25px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:18px;color:var(--muted)}.empty h3{color:white;font-size:15px}.empty p{margin-top:6px;font-size:11px}.empty .create-button{margin-top:18px}
 .mobile-header{display:none}
-@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.quiz-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.quiz-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){.sidebar{display:none}.main{width:100%;margin-left:0;padding:24px 18px 50px}.mobile-header{display:flex;align-items:center;margin-bottom:25px}.mobile-logo{width:35px;height:35px;font-size:14px;margin-right:9px}.topbar{flex-direction:column}.create-button{width:100%}}
-@media(max-width:600px){.stats,.quiz-grid{grid-template-columns:1fr}.quiz-details{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr}}
+@media(max-width:600px){.quiz-grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar">
-    <div class="brand"><div class="brand-logo">Q</div><div class="brand-name">Quiz<span>Core</span></div></div>
+    <div class="brand"><div class="brand-logo">LH</div><div class="brand-name">Logic <span>Hunt</span></div></div>
     <div class="nav-label">MAIN MENU</div>
     <nav class="nav">
         <a href="{{ url_for('admin_dashboard') }}" class="nav-item active"><span class="nav-icon">▦</span>Dashboard</a>
@@ -65,13 +61,13 @@ border-right:1px solid var(--border);backdrop-filter:blur(25px);z-index:20}
 </aside>
 
 <main class="main">
-    <div class="mobile-header"><div class="mobile-logo">Q</div><strong>QuizCore</strong></div>
+    <div class="mobile-header"><div class="mobile-logo">LH</div><strong>Logic Hunt</strong></div>
 
     <header class="topbar">
         <div class="heading">
             <div class="eyebrow">ADMIN CONTROL CENTER</div>
             <h1>Dashboard</h1>
-            <p>Manage quiz status, submissions, scores and results.</p>
+            <p>Manage your Logic Hunt competitions and questions.</p>
         </div>
         <a href="{{ url_for('create_quiz_page') }}" class="create-button">＋ Create Quiz</a>
     </header>
@@ -82,16 +78,11 @@ border-right:1px solid var(--border);backdrop-filter:blur(25px);z-index:20}
         {% endfor %}
     {% endwith %}
 
-    <section class="stats">
-        <div class="stat-card"><div class="stat-label">TOTAL QUIZZES</div><div class="stat-number">{{ quizzes|length }}</div><div class="stat-meta">All created quizzes</div></div>
-        <div class="stat-card"><div class="stat-label">ACTIVE QUIZZES</div><div class="stat-number">{{ quizzes|selectattr("status","equalto","running")|list|length }}</div><div class="stat-meta">Students can access these</div></div>
-        <div class="stat-card"><div class="stat-label">DRAFTS</div><div class="stat-number">{{ quizzes|selectattr("status","equalto","draft")|list|length }}</div><div class="stat-meta">Hidden from students</div></div>
-        <div class="stat-card"><div class="stat-label">RESULTS DECLARED</div><div class="stat-number">{{ quizzes|selectattr("results_revealed","equalto",true)|list|length }}</div><div class="stat-meta">Official results available</div></div>
-    </section>
+
 
     <section class="section">
         <div class="section-header">
-            <div class="section-title"><div class="eyebrow">QUIZ LIBRARY</div><h2>Your Quizzes</h2></div>
+            <div class="section-title"><div class="eyebrow">LOGIC HUNT</div><h2>Your Quizzes</h2></div>
             <span style="color:var(--muted);font-size:11px">{{ quizzes|length }} TOTAL</span>
         </div>
 
@@ -100,29 +91,17 @@ border-right:1px solid var(--border);backdrop-filter:blur(25px);z-index:20}
             {% for quiz in quizzes %}
             <article class="quiz-card">
                 <div class="quiz-top">
-                    <span class="status {{ 'running' if quiz.status == 'running' else 'draft' }}">
-                        {{ 'ACTIVE' if quiz.status == 'running' else 'DRAFT' }}
-                    </span>
-                    <span style="color:var(--muted);font-size:11px">{{ quiz.submission_count }} submissions</span>
+                    <span style="color:var(--muted);font-size:11px">LOGIC HUNT</span>
                 </div>
 
                 <h3>{{ quiz.title }}</h3>
                 <p class="quiz-description">{{ quiz.description or "No description has been added to this quiz." }}</p>
 
-                <div class="quiz-details">
-                    <div class="detail"><span>STATUS</span><strong>{{ 'Active' if quiz.status == 'running' else 'Draft' }}</strong></div>
-                    <div class="detail"><span>RESULTS</span><strong>{{ 'Declared' if quiz.results_revealed else 'Hidden' }}</strong></div>
-                    <div class="detail"><span>SUBMISSIONS</span><strong>{{ quiz.submission_count }}</strong></div>
-                </div>
+
 
                 <div class="actions">
-                    <form method="POST" action="{{ url_for('toggle_quiz_status', quiz_id=quiz.id) }}">
-                        <button class="action {{ 'draft' if quiz.status == 'running' else 'active' }}" type="submit">
-                            {{ 'Move to Draft' if quiz.status == 'running' else 'Make Active' }}
-                        </button>
-                    </form>
                     <a class="action" href="{{ url_for('admin_quiz_results', quiz_id=quiz.id) }}">Submissions</a>
-                    <a class="action full" href="{{ url_for('add_question_page', quiz_id=quiz.id) }}">Manage Questions</a>
+                    <a class="action" href="{{ url_for('add_question_page', quiz_id=quiz.id) }}">Manage Questions</a>
                 </div>
             </article>
             {% endfor %}
