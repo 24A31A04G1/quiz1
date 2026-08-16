@@ -1,7 +1,9 @@
 
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
+import uuid
 from supabase import create_client, Client
 
 
@@ -52,6 +54,52 @@ def format_indian_submission_time(value):
     except Exception as error:
         print("SUBMITTED TIME FORMAT ERROR:", repr(error))
         return str(value)
+
+
+# =========================================
+# QUESTION IMAGE UPLOAD
+# =========================================
+
+QUESTION_IMAGE_BUCKET = "quiz-images"
+MAX_QUESTION_IMAGE_SIZE = 5 * 1024 * 1024
+ALLOWED_IMAGE_TYPES = {
+    "image/png": ".png",
+    "image/jpeg": ".jpg",
+    "image/webp": ".webp",
+}
+
+
+def upload_question_image(file):
+    """Upload an optional question image and return its public URL."""
+    if not file or not file.filename:
+        return None
+
+    content_type = (file.content_type or "").lower().strip()
+
+    if content_type not in ALLOWED_IMAGE_TYPES:
+        raise ValueError("Only PNG, JPG/JPEG and WEBP images are allowed.")
+
+    image_bytes = file.read()
+
+    if not image_bytes:
+        return None
+
+    if len(image_bytes) > MAX_QUESTION_IMAGE_SIZE:
+        raise ValueError("Question image must be 5 MB or smaller.")
+
+    filename = f"{uuid.uuid4().hex}{ALLOWED_IMAGE_TYPES[content_type]}"
+
+    supabase.storage.from_(QUESTION_IMAGE_BUCKET).upload(
+        filename,
+        image_bytes,
+        {
+            "content-type": content_type,
+            "cache-control": "3600",
+            "upsert": "false",
+        }
+    )
+
+    return supabase.storage.from_(QUESTION_IMAGE_BUCKET).get_public_url(filename)
 
 
 # =========================================
@@ -331,6 +379,21 @@ def add_question(quiz_id):
         ""
     ).strip().upper()
 
+    image_url = None
+
+    if request.files.get("question_image"):
+        try:
+            image_url = upload_question_image(request.files.get("question_image"))
+        except Exception as error:
+            print("QUESTION IMAGE UPLOAD ERROR:", repr(error))
+            flash(f"Unable to upload question image: {error}", "error")
+            return redirect(
+                url_for(
+                    "add_question_page",
+                    quiz_id=quiz_id
+                )
+            )
+
     if not all([
         question_text,
         option_a,
@@ -397,7 +460,8 @@ def add_question(quiz_id):
         "option_c": option_c,
         "option_d": option_d,
         "correct_answer": correct_answer,
-        "question_order": next_order
+        "question_order": next_order,
+        "image_url": image_url
     }
 
 
@@ -478,6 +542,21 @@ def update_question(quiz_id, question_id):
         ""
     ).strip().upper()
 
+    new_image_url = None
+
+    if request.files.get("question_image"):
+        try:
+            new_image_url = upload_question_image(request.files.get("question_image"))
+        except Exception as error:
+            print("QUESTION IMAGE UPLOAD ERROR:", repr(error))
+            flash(f"Unable to upload question image: {error}", "error")
+            return redirect(
+                url_for(
+                    "add_question_page",
+                    quiz_id=quiz_id
+                )
+            )
+
     if not all([
         question_text,
         option_a,
@@ -521,6 +600,10 @@ def update_question(quiz_id, question_id):
         "option_d": option_d,
         "correct_answer": correct_answer,
     }
+
+    # Keep the existing image when editing unless a new image is selected.
+    if new_image_url:
+        update_data["image_url"] = new_image_url
 
     try:
 
@@ -900,7 +983,7 @@ def admin_submission_detail(quiz_id, submission_id):
         questions_response = (
             supabase.table("questions")
             .select(
-                "id,question_text,option_a,option_b,option_c,option_d,"
+                "id,question_text,image_url,option_a,option_b,option_c,option_d,"
                 "correct_answer,question_order"
             )
             .eq("quiz_id", quiz_id)
@@ -942,6 +1025,7 @@ def admin_submission_detail(quiz_id, submission_id):
             review.append({
                 "number": index,
                 "question_text": question.get("question_text") or "",
+                "image_url": question.get("image_url"),
                 "options": {
                     "A": question.get("option_a") or "",
                     "B": question.get("option_b") or "",
