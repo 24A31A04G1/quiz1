@@ -660,6 +660,63 @@
             line-height: 1.5;
         }
 
+        .image-upload-section {
+            margin: 0 0 21px;
+        }
+
+        .image-upload-box {
+            border: 1px dashed rgba(124,92,255,0.32);
+            border-radius: 12px;
+            padding: 14px;
+            background: rgba(124,92,255,0.035);
+        }
+
+        .image-upload-box input[type="file"] {
+            padding: 10px;
+            background: rgba(255,255,255,0.025);
+            border-style: dashed;
+            cursor: pointer;
+        }
+
+        .image-help {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .image-preview {
+            display: none;
+            max-width: 100%;
+            max-height: 180px;
+            margin-top: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            object-fit: contain;
+            background: #050814;
+        }
+
+        .existing-image {
+            display: block;
+            max-width: 100%;
+            max-height: 180px;
+            margin-top: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            object-fit: contain;
+            background: #050814;
+        }
+
+        .question-image {
+            display: block;
+            width: 100%;
+            max-height: 190px;
+            margin: 12px 0 2px;
+            border-radius: 10px;
+            object-fit: contain;
+            background: #050814;
+            border: 1px solid var(--border);
+        }
+
 
         .options-title {
 
@@ -1306,20 +1363,6 @@
             </a>
 
 
-            <a
-                href="#"
-                class="nav-item"
-            >
-                Participants
-            </a>
-
-
-            <a
-                href="#"
-                class="nav-item"
-            >
-                Results
-            </a>
 
         </nav>
 
@@ -1606,6 +1649,7 @@
 
                 <form
                     method="POST"
+                    enctype="multipart/form-data"
                     action="{{ url_for(
                         'add_question',
                         quiz_id=quiz.id
@@ -1629,6 +1673,38 @@
                         maxlength="500"
                         required
                     ></textarea>
+
+
+                    <!-- OPTIONAL QUESTION IMAGE -->
+
+                    <div class="image-upload-section">
+
+                        <label class="question-label">
+                            Question Image <span style="color:var(--muted);font-weight:600;">(Optional)</span>
+                        </label>
+
+                        <div class="image-upload-box">
+
+                            <input
+                                type="file"
+                                name="question_image"
+                                id="questionImage"
+                                accept="image/png,image/jpeg,image/jpg,image/webp"
+                            >
+
+                            <div class="image-help">
+                                PNG, JPG or WEBP • Max 5 MB • Leave empty for text-only questions.
+                            </div>
+
+                            <img
+                                id="imagePreview"
+                                class="image-preview"
+                                alt="Selected question image preview"
+                            >
+
+                        </div>
+
+                    </div>
 
 
                     <!-- OPTIONS -->
@@ -1873,6 +1949,14 @@
 
                             <div class="question-content">
 
+                                {% if question.image_url %}
+                                    <img
+                                        class="question-image"
+                                        src="{{ question.image_url }}"
+                                        alt="Question image"
+                                    >
+                                {% endif %}
+
 
                                 <h3>
                                     {{ question.question_text }}
@@ -2021,6 +2105,8 @@
     const submitBtn = document.getElementById("submitBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const questionText = document.getElementById("questionText");
+    const questionImage = document.getElementById("questionImage");
+    const imagePreview = document.getElementById("imagePreview");
 
     let isEditMode = false;
     let editingQuestionId = null;
@@ -2046,6 +2132,40 @@
             } else {
                 this.style.borderColor = "";
             }
+        });
+    }
+
+    // Question image preview
+    if (questionImage && imagePreview) {
+        questionImage.addEventListener("change", function () {
+            const file = this.files && this.files[0];
+
+            if (!file) {
+                imagePreview.style.display = "none";
+                imagePreview.removeAttribute("src");
+                return;
+            }
+
+            if (!file.type.startsWith("image/")) {
+                alert("Please select an image file.");
+                this.value = "";
+                imagePreview.style.display = "none";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Image size must be 5 MB or less.");
+                this.value = "";
+                imagePreview.style.display = "none";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                imagePreview.src = event.target.result;
+                imagePreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
         });
     }
 
@@ -2117,6 +2237,11 @@
         cancelBtn.addEventListener("click", function () {
             form.reset();
             form.action = originalAction;
+
+            if (imagePreview) {
+                imagePreview.style.display = "none";
+                imagePreview.removeAttribute("src");
+            }
             submitBtn.innerHTML = "+ Add Question";
             cancelBtn.classList.remove("show");
             isEditMode = false;
