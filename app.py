@@ -1,6 +1,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from supabase import create_client, Client
 
 
@@ -20,6 +21,37 @@ supabase: Client = create_client(
 
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
+
+
+# =========================================
+# INDIAN TIME DISPLAY HELPER
+# =========================================
+
+def format_indian_submission_time(value):
+    if not value:
+        return "—"
+
+    try:
+        text = str(value).strip()
+
+        # Supabase commonly returns UTC timestamps ending in Z.
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+
+        dt = datetime.fromisoformat(text)
+
+        # Treat a timezone-less timestamp as UTC.
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+
+        # Convert to Indian Standard Time and show AM/PM.
+        return dt.astimezone(
+            ZoneInfo("Asia/Kolkata")
+        ).strftime("%d-%m-%Y %I:%M %p")
+
+    except Exception as error:
+        print("SUBMITTED TIME FORMAT ERROR:", repr(error))
+        return str(value)
 
 
 # =========================================
@@ -715,6 +747,11 @@ def admin_quiz_results(quiz_id):
             if w.get("student_id") is not None
         }
 
+        for item in leaderboard:
+            item["submitted_display"] = format_indian_submission_time(
+                item.get("submitted_at")
+            )
+
         return render_template(
             "admin_results.html",
             quiz=quiz,
@@ -729,6 +766,90 @@ def admin_quiz_results(quiz_id):
         flash(f"Unable to load results: {error}", "error")
         return redirect(url_for("admin_dashboard"))
 
+
+
+# =========================================
+# DELETE INDIVIDUAL STUDENT SUBMISSION
+# =========================================
+
+@app.route(
+    "/admin/quiz/<quiz_id>/submission/<submission_id>/delete",
+    methods=["POST"]
+)
+def delete_submission(quiz_id, submission_id):
+
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    try:
+        # Verify that this submission belongs to this quiz.
+        response = (
+            supabase
+            .table("quiz_responses")
+            .select("id,quiz_id,student_id,name,roll_no")
+            .eq("id", submission_id)
+            .eq("quiz_id", quiz_id)
+            .single()
+            .execute()
+        )
+
+        submission = response.data
+
+        if not submission:
+            flash("Submission not found.", "error")
+            return redirect(url_for("admin_quiz_results", quiz_id=quiz_id))
+
+        # Remove a related winner entry, if this student was declared a winner.
+        student_id = submission.get("student_id")
+
+        if student_id is not None:
+            (
+                supabase
+                .table("winners")
+                .delete()
+                .eq("quiz_id", quiz_id)
+                .eq("student_id", student_id)
+                .execute()
+            )
+
+        # Delete only the selected submission.
+        (
+            supabase
+            .table("quiz_responses")
+            .delete()
+            .eq("id", submission_id)
+            .eq("quiz_id", quiz_id)
+            .execute()
+        )
+
+        # Keep the winners visibility flag correct if no winners remain.
+        winners_left = (
+            supabase
+            .table("winners")
+            .select("id", count="exact")
+            .eq("quiz_id", quiz_id)
+            .execute()
+        )
+
+        if (winners_left.count or 0) == 0:
+            (
+                supabase
+                .table("quizzes")
+                .update({"winners_revealed": False})
+                .eq("id", quiz_id)
+                .execute()
+            )
+
+        flash(
+            f"Submission of {submission.get('name') or 'student'} deleted successfully.",
+            "success"
+        )
+
+    except Exception as error:
+        print("DELETE SUBMISSION ERROR:", repr(error))
+        flash(f"Unable to delete submission: {error}", "error")
+
+    return redirect(url_for("admin_quiz_results", quiz_id=quiz_id))
 
 
 # =========================================
@@ -1171,4 +1292,9 @@ def home():
 # =========================================
 
 if __name__ == "__main__":
-    app.run(port=5001)
+
+    app.run(
+        debug=True,
+        host="127.0.0.1",
+        port=5000
+    )
