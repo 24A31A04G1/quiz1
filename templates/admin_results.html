@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 .flash{padding:12px 15px;margin-bottom:18px;border-radius:10px;font-size:12px;font-weight:700}.flash.success{color:#d5d9e5;background:rgba(255,255,255,.05);border:1px solid var(--border)}.flash.error{color:#d5d9e5;background:rgba(255,255,255,.05);border:1px solid var(--border)}
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}.stat{padding:18px;border:1px solid var(--border);border-radius:16px;background:rgba(15,21,40,.8)}.stat span{color:var(--muted);font-size:10px;font-weight:800}.stat strong{display:block;margin-top:10px;font-size:25px}
 .panel{border:1px solid var(--border);border-radius:20px;background:rgba(15,21,40,.78);overflow:hidden}.panel-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:15px}.panel-head h2{font-size:18px}.panel-head p{margin-top:5px;color:var(--muted);font-size:11px}
-.status{padding:6px 10px;border-radius:100px;font-size:9px;font-weight:900}.status.active{color:#d5d9e5;background:rgba(255,255,255,.06)}.status.draft{color:#9ba4b8;background:rgba(255,255,255,.06)}
+.status{padding:6px 10px;border-radius:100px;font-size:9px;font-weight:900}.status.active{color:#d5d9e5;background:rgba(255,255,255,.06)}.status.draft{color:#9ba4b8;background:rgba(255,255,255,.06)}.submission-tools{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.search-wrap{position:relative;flex:1;max-width:430px}.search-wrap input{width:100%;height:40px;padding:0 40px 0 13px;border:1px solid var(--border);border-radius:10px;outline:none;background:rgba(255,255,255,.035);color:var(--text);font-size:11px}.search-wrap input::placeholder{color:#66718a}.search-wrap input:focus{border-color:rgba(124,92,255,.5);background:rgba(124,92,255,.04)}.search-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#7f89a1;font-size:14px;pointer-events:none}.search-info{color:var(--muted);font-size:10px}@media(max-width:800px){.submission-tools{align-items:stretch;flex-direction:column}.search-wrap{max-width:none}.search-info{display:none}}
 
 .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:950px}th,td{padding:14px 15px;border-bottom:1px solid var(--border);text-align:left;font-size:11px;white-space:nowrap}th{color:#66718a;font-size:9px;letter-spacing:.7px}td{color:#d9deea}tr:hover td{background:rgba(255,255,255,.015)}
 .rank{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:rgba(124,92,255,.08);font-weight:900}.rank.top1{color:#ffe18a;background:rgba(255,200,87,.12)}.rank.top2{color:#d9e1ef;background:rgba(200,210,225,.08)}.rank.top3{color:#dba477;background:rgba(190,120,70,.08)}
@@ -27,7 +28,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 .primary{height:44px;padding:0 18px;border:0;border-radius:11px;color:white;background:linear-gradient(135deg,#7c5cff,#6746e8);font-size:11px;font-weight:900;cursor:pointer}.primary:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}.actions form{display:inline-flex}.undeclare-action{background:linear-gradient(135deg,#b4233c,#e0475d)}
 .danger{height:42px;padding:0 15px;border:1px solid rgba(255,96,119,.2);border-radius:10px;color:#ff91a2;background:rgba(255,96,119,.06);font-size:10px;font-weight:800;cursor:pointer}
 .winners{margin-top:24px}.winner-card{padding:18px 20px;border:1px solid rgba(255,200,87,.12);border-radius:16px;background:rgba(255,200,87,.04);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:15px}.winner-rank{color:#ffd66f;font-weight:900}.winner-name{font-weight:800}.winner-meta{color:var(--muted);font-size:10px;margin-top:4px}.winner-score{font-weight:900}.empty{padding:50px;text-align:center;color:var(--muted);font-size:12px}
-.view-btn{display:inline-flex;align-items:center;justify-content:center;min-width:92px;height:34px;padding:0 11px;border:1px solid rgba(124,92,255,.25);border-radius:9px;color:#c5baff;background:rgba(124,92,255,.08);font-size:9px;font-weight:900;transition:.2s}.view-btn:hover{color:#fff;background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.5)}@media(max-width:800px){.main{padding:22px 15px 50px}.summary{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr}.top{flex-direction:column}.back{width:100%;justify-content:center}.bottom{flex-direction:column;align-items:stretch}.actions{flex-direction:column;align-items:stretch}.primary{width:100%}}
+.view-btn{display:inline-flex;align-items:center;justify-content:center;min-width:92px;height:34px;padding:0 11px;border:1px solid rgba(124,92,255,.25);border-radius:9px;color:#c5baff;background:rgba(124,92,255,.08);font-size:9px;font-weight:900;transition:.2s}.view-btn:hover{color:#fff;background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.5)}.delete-btn{display:inline-flex;align-items:center;justify-content:center;min-width:78px;height:34px;padding:0 11px;margin-left:6px;border:1px solid rgba(255,96,119,.25);border-radius:9px;color:#ff91a2;background:rgba(255,96,119,.07);font-size:9px;font-weight:900;cursor:pointer;transition:.2s}.delete-btn:hover{color:#fff;background:rgba(255,96,119,.18);border-color:rgba(255,96,119,.55)}@media(max-width:800px){.main{padding:22px 15px 50px}.summary{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr}.top{flex-direction:column}.back{width:100%;justify-content:center}.bottom{flex-direction:column;align-items:stretch}.actions{flex-direction:column;align-items:stretch}.primary{width:100%}}
 @media(max-width:500px){.summary{grid-template-columns:1fr}}
 </style>
 </head>
@@ -66,12 +67,19 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 
         {% if leaderboard %}
         <form method="POST" action="{{ url_for('declare_quiz_winners', quiz_id=quiz.id) }}" id="winnerForm">
+            <div class="submission-tools">
+                <div class="search-wrap">
+                    <input id="rollSearch" type="search" placeholder="Search by roll number..." autocomplete="off">
+                    <span class="search-icon">⌕</span>
+                </div>
+                <span class="search-info" id="searchInfo">Showing all submissions</span>
+            </div>
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
-                            <th>SELECT</th>
                             <th>RANK</th>
+                            <th>SELECT</th>
                             <th>STUDENT</th>
                             <th>ROLL NUMBER</th>
                             <th>YEAR</th>
@@ -79,35 +87,45 @@ a{text-decoration:none;color:inherit}button{font:inherit}
                             <th>SCORE</th>
                             <th>ANSWERED</th>
                             <th>TOTAL TIME</th>
-                            <th>SUBMITTED</th><th>ANSWERS</th>
+                            <th>SUBMITTED</th><th>ANSWERS</th><th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for row in leaderboard %}
                         <tr>
                             <td>
-                                <input class="select-box winner-check" type="checkbox"
-                                       name="student_ids" value="{{ row.student_id }}"
-                                       {% if row.student_id|string in winner_ids %}checked{% endif %}>
-                            </td>
-                            <td>
                                 <div class="rank {% if row.rank == 1 %}top1{% elif row.rank == 2 %}top2{% elif row.rank == 3 %}top3{% endif %}">
                                     {{ row.rank }}
                                 </div>
                             </td>
-                            <td class="name"><strong>{{ row.name or 'Unknown' }}</strong><span>{{ row.student_id or 'No student ID' }}</span></td>
+                            <td>
+                                <input class="select-box winner-check" type="checkbox"
+                                       name="student_ids" value="{{ row.student_id }}"
+                                       {% if row.student_id|string in winner_ids %}checked{% endif %}>
+                            </td>
+                            <td class="name"><strong>{{ row.name or 'Unknown' }}</strong></td>
                             <td>{{ row.roll_no or '—' }}</td>
                             <td>{{ row.year or '—' }}</td>
                             <td>{{ row.section or '—' }}</td>
                             <td class="score">{{ row.score }} / {{ row.total_questions }}</td>
                             <td>{{ row.answered_questions }} / {{ row.total_questions }}</td>
                             <td class="time" data-seconds="{{ row.total_time_taken or 0 }}">0 sec</td>
-                            <td>{{ row.submitted_at or '—' }}</td>
+                            <td>{{ row.submitted_display or '—' }}</td>
                             <td>
                                 <a class="view-btn"
                                    href="{{ url_for('admin_submission_detail', quiz_id=quiz.id, submission_id=row.id) }}">
                                     VIEW ANSWERS
                                 </a>
+                                <button class="delete-btn"
+                                        type="submit"
+                                        form="winnerForm"
+                                        formaction="{{ url_for('delete_submission', quiz_id=quiz.id, submission_id=row.id) }}"
+                                        formmethod="POST"
+                                        formnovalidate
+                                        data-delete-submission="true"
+                                        onclick="return confirm('Delete this student submission? This cannot be undone.');">
+                                    DELETE
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -193,6 +211,31 @@ function formatTime(seconds){
 document.querySelectorAll('[data-seconds]').forEach(el => el.textContent = formatTime(el.dataset.seconds));
 document.querySelectorAll('[data-winner-seconds]').forEach(el => el.textContent = formatTime(el.dataset.winnerSeconds));
 
+const rollSearch = document.getElementById('rollSearch');
+const searchInfo = document.getElementById('searchInfo');
+
+function filterSubmissions(){
+    const query = (rollSearch?.value || '').trim().toLowerCase();
+    const rows = [...document.querySelectorAll('tbody tr')];
+    let visible = 0;
+
+    rows.forEach(row => {
+        if(row.id === 'noSearchResults') return;
+        const rollCell = row.children[3];
+        const rollNumber = rollCell ? rollCell.textContent.trim().toLowerCase() : '';
+        const match = !query || rollNumber.includes(query);
+        row.style.display = match ? '' : 'none';
+        if(match) visible++;
+    });
+
+    if(searchInfo){
+        searchInfo.textContent = query
+            ? `${visible} submission(s) found`
+            : `Showing all ${rows.filter(r => r.id !== 'noSearchResults').length} submission(s)`;
+    }
+}
+rollSearch?.addEventListener('input', filterSubmissions);
+
 const checks = [...document.querySelectorAll('.winner-check')];
 const count = document.getElementById('selectedCount');
 const button = document.getElementById('declareButton');
@@ -215,12 +258,19 @@ checks.forEach(c => c.addEventListener('change', refresh));
 refresh();
 
 document.getElementById('winnerForm')?.addEventListener('submit', function(e){
+    // DELETE buttons use this same form only to avoid nested forms.
+    // Do not apply winner-selection validation to a deletion request.
+    if(e.submitter && e.submitter.dataset.deleteSubmission === 'true'){
+        return;
+    }
+
     const n = checks.filter(c => c.checked).length;
     if(n === 0){
         e.preventDefault();
         alert('Select at least one student to declare as a winner.');
         return;
     }
+
     if(!confirm(`Declare/redeclare ${n} selected student(s) as winners? This will update the separate winners list visible to ALL students.`)){
         e.preventDefault();
     }
